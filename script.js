@@ -258,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 );
                 
                 // Mở ứng dụng Mail mặc định trên thiết bị của người dùng
-                window.location.href = `mailto:nmthien.dev@gmail.com?subject=${subject}&body=${body}`;
+                window.location.href = `mailto:tranquocviett198@gmail.com?subject=${subject}&body=${body}`;
                 
                 // Xóa dữ liệu trong form sau khi bấm gửi
                 contactForm.reset();
