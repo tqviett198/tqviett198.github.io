@@ -251,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 const subject = encodeURIComponent('Liên hệ công việc từ Portfolio - ' + name);
                 const body = encodeURIComponent(
-                    `Kính gửi bạn Nguyễn Minh Thiện,\n\n` +
+                    `Kính gửi bạn Trần Quốc Việt,\n\n` +
                     `Tôi tên là: ${name}\n\n` +
                     `Nội dung liên hệ:\n${message}\n\n` +
                     `Trân trọng.`
