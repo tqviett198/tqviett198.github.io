@@ -16,6 +16,13 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
+<style>
+        .language-link { color: var(--text-primary); font-weight: 700; padding: .45rem; }
+        .case-study { scroll-margin-top: 6rem; max-width: 54rem; margin: 4rem auto 0; }
+        .case-study p, .case-study figcaption { color: var(--text-secondary); line-height: 1.7; margin: .65rem 0 1.2rem; }
+        .case-study img { max-width: 100%; height: auto; border-radius: .5rem; }
+        .case-study figure { margin: 1rem 0; }
+    </style>
 </head>
 <body class="dark-theme">
     <!-- Particles Background -->
@@ -46,6 +53,7 @@
                 </button>
                 <a href="CV_TranQuocViet.pdf" target="_blank" class="btn-primary resume-btn">Xem CV của tôi <i class="fa-solid fa-circle-arrow-down" style="margin-left: 6px;"></i></a>
             </div>
+            <a class="language-link" href="?lang=en" lang="en" hreflang="en" aria-label="English">EN</a>
             <button class="mobile-menu-btn" aria-label="Open menu">
                 <i class="fa-solid fa-bars"></i>
             </button>
@@ -189,6 +197,18 @@
                 <div class="projects-grid">
                     <article class="project-card reveal">
                         <div class="project-img-placeholder">
+                            <i class="fa-solid fa-seedling project-placeholder-icon"></i>
+                            <div class="project-tech-overlays"><span>React PWA</span> <span>Django REST Framework</span> <span>PostgreSQL</span></div>
+                        </div>
+                        <div class="project-body">
+                            <span class="project-tag">Dự án cá nhân đang phát triển · Có AI hỗ trợ</span>
+                            <h3 class="project-title">DurianCare</h3>
+                            <p class="project-desc">Ứng dụng quản lý vườn sầu riêng từ nhật ký canh tác đến bán hàng. Hệ thống kiểm tra thời gian cách ly trước thu hoạch, ghi lại lý do khi chủ vườn cho phép ngoại lệ và khóa các dòng tồn kho khi bán. Dự án có 138 bài kiểm thử tự động và dùng Celery để gửi nhắc việc.</p>
+                            <div class="project-links"><a class="project-link-btn" href="#durian-study">Đọc bài phân tích</a> <a href="https://github.com/tqviett198/duriancare" target="_blank" rel="noopener noreferrer" class="project-link-btn"><i class="fa-brands fa-github"></i> Mã nguồn DurianCare</a></div>
+                        </div>
+                    </article>
+                    <article class="project-card reveal">
+                        <div class="project-img-placeholder">
                             <i class="fa-solid fa-sack-dollar project-placeholder-icon"></i>
                             <div class="project-tech-overlays"><span>React</span> <span>Express</span> <span>MongoDB</span></div>
                         </div>
@@ -197,18 +217,6 @@
                             <h3 class="project-title">Loan Platform</h3>
                             <p class="project-desc">Nền tảng mô phỏng quy trình vay. Mình thiết kế 14 model Mongoose và xây dựng API cho hồ sơ vay, nộp hồ sơ KYC, duyệt hồ sơ, lịch sử ví và yêu cầu rút tiền. Người dùng và quản trị viên có luồng đăng nhập riêng với JWT và bcrypt.</p>
                             <div class="project-links"><a href="https://github.com/tqviett198/vay-platform" target="_blank" rel="noopener noreferrer" class="project-link-btn"><i class="fa-brands fa-github"></i> Mã nguồn Loan Platform</a></div>
-                        </div>
-                    </article>
-                    <article class="project-card reveal">
-                        <div class="project-img-placeholder">
-                            <i class="fa-solid fa-seedling project-placeholder-icon"></i>
-                            <div class="project-tech-overlays"><span>React PWA</span> <span>Django REST Framework</span> <span>PostgreSQL</span></div>
-                        </div>
-                        <div class="project-body">
-                            <span class="project-tag">Dự án cá nhân đang phát triển · Có AI hỗ trợ</span>
-                            <h3 class="project-title">DurianCare</h3>
-                            <p class="project-desc">Ứng dụng quản lý vườn sầu riêng từ nhật ký canh tác đến bán hàng. Hệ thống kiểm tra thời gian cách ly trước thu hoạch, ghi lại lý do khi chủ vườn cho phép ngoại lệ và khóa các dòng tồn kho khi bán. Dự án có 138 bài kiểm thử tự động và dùng Celery để gửi nhắc việc.</p>
-                            <div class="project-links"><a href="https://github.com/tqviett198/duriancare" target="_blank" rel="noopener noreferrer" class="project-link-btn"><i class="fa-brands fa-github"></i> Mã nguồn DurianCare</a></div>
                         </div>
                     </article>
                     <article class="project-card reveal">
@@ -225,6 +233,13 @@
                     </article>
                 </div>
             </div>
+        <article id="durian-study" class="section-container case-study">
+                <h2>Hai đơn hàng cùng mua 50 kg sầu riêng cuối cùng</h2><p>Hai người cùng thấy lô còn 50 kg. Nếu cả hai phiếu đều bán 50 kg, hệ thống có thể ghi nhận bán 100 kg dù vườn chỉ có một nửa.</p>
+                <h3>Cách xử lý trong PostgreSQL</h3><p>Mỗi phiếu bán chạy trong một transaction. Dịch vụ khóa các dòng tồn kho bằng select_for_update() theo thứ tự ID, rồi kiểm tra số kg còn lại trước khi ghi phiếu và trừ tồn.</p><p>Nếu đơn A lấy khóa trước và mua hết 50 kg, đơn B phải chờ. Sau khi A hoàn tất, B đọc số dư mới là 0 kg và nhận lỗi insufficient_stock. Nếu A bị hủy giao dịch, lượng hàng vẫn còn cho B.</p>
+                <h3>Bài kiểm thử chứng minh điều gì?</h3><p>Test gọi hàm tạo phiếu hai lần liên tiếp trên cùng 50 kg và kiểm tra mã lỗi ở lần thứ hai. Nó xác nhận quy tắc khi hết tồn. Để đo hành vi chờ khóa thực tế cần hai kết nối PostgreSQL chạy đồng thời.</p>
+                <figure><img src="durian-test.svg" width="710" height="330" alt="" loading="lazy"><figcaption>Đoạn kiểm thử hai phiếu bán trong test_sales.py</figcaption></figure>
+                <div class="project-links"><a class="project-link-btn" href="https://github.com/tqviett198/duriancare/blob/main/backend/sales/services.py#L25">Xem mã xử lý bán hàng</a> <a class="project-link-btn" href="https://github.com/tqviett198/duriancare/blob/main/backend/tests/test_sales.py#L835">Xem bài kiểm thử</a></div>
+            </article>
         </section>
 
         <!-- Education Section -->
@@ -337,6 +352,7 @@
     </footer>
 
     <!-- Custom JS -->
+    <script src="language.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
