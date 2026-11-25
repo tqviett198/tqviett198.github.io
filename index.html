@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trần Quốc Việt | Software Developer Intern</title>
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Trần Quốc Việt | Software Developer Intern">
+    <meta property="og:description" content="React &amp; Python · DurianCare, Loan Platform, Deepfake Detector">
+    <meta property="og:image" content="https://tqviett198.github.io/avatar.jpg">
+    <meta property="og:image:alt" content="Trần Quốc Việt">
+    <meta name="twitter:card" content="summary">
     <meta name="description" content="Portfolio cá nhân của Trần Quốc Việt - Software Developer Intern, định hướng full-stack với React và Python. Sinh viên năm cuối tại Trường Đại học Công Thương TP. Hồ Chí Minh (HUIT).">
     
     <!-- Google Fonts -->
@@ -54,14 +60,14 @@
                 <a href="CV_TranQuocViet.pdf" target="_blank" class="btn-primary resume-btn">Xem CV của tôi <i class="fa-solid fa-circle-arrow-down" style="margin-left: 6px;"></i></a>
             </div>
             <a class="language-link" href="?lang=en" lang="en" hreflang="en" aria-label="English">EN</a>
-            <button class="mobile-menu-btn" aria-label="Open menu">
+            <button class="mobile-menu-btn" aria-controls="mobile-navigation" aria-expanded="false" aria-label="Open menu">
                 <i class="fa-solid fa-bars"></i>
             </button>
         </div>
     </header>
 
     <!-- Mobile Navigation Drawer -->
-    <div class="mobile-nav">
+    <div class="mobile-nav" id="mobile-navigation">
         <a href="#about" class="mobile-nav-link">Giới thiệu</a>
         <a href="#skills" class="mobile-nav-link">Kỹ năng</a>
         <a href="#projects" class="mobile-nav-link">Dự án</a>
@@ -236,6 +242,16 @@
         <article id="durian-study" class="section-container case-study">
                 <h2>Hai đơn hàng cùng mua 50 kg sầu riêng cuối cùng</h2><p>Hai người cùng thấy lô còn 50 kg. Nếu cả hai phiếu đều bán 50 kg, hệ thống có thể ghi nhận bán 100 kg dù vườn chỉ có một nửa.</p>
                 <h3>Cách xử lý trong PostgreSQL</h3><p>Mỗi phiếu bán chạy trong một transaction. Dịch vụ khóa các dòng tồn kho bằng select_for_update() theo thứ tự ID, rồi kiểm tra số kg còn lại trước khi ghi phiếu và trừ tồn.</p><p>Nếu đơn A lấy khóa trước và mua hết 50 kg, đơn B phải chờ. Sau khi A hoàn tất, B đọc số dư mới là 0 kg và nhận lỗi insufficient_stock. Nếu A bị hủy giao dịch, lượng hàng vẫn còn cho B.</p>
+                <div class="stock-demo" id="stock-demo" hidden>
+                    <h3 data-demo="title"></h3>
+                    <p data-demo="intro"></p>
+                    <button type="button" class="btn-primary" data-demo="run"></button>
+                    <div role="status" aria-live="polite" aria-atomic="true">
+                        <p><strong data-demo="inventory"></strong></p>
+                        <ol data-demo="steps"></ol>
+                    </div>
+                    <a class="project-link-btn" href="https://github.com/tqviett198/duriancare/blob/main/backend/sales/services.py#L72" data-demo="source"></a>
+                </div>
                 <h3>Bài kiểm thử chứng minh điều gì?</h3><p>Test gọi hàm tạo phiếu hai lần liên tiếp trên cùng 50 kg và kiểm tra mã lỗi ở lần thứ hai. Nó xác nhận quy tắc khi hết tồn. Để đo hành vi chờ khóa thực tế cần hai kết nối PostgreSQL chạy đồng thời.</p>
                 <figure><img src="durian-test.svg" width="710" height="330" alt="" loading="lazy"><figcaption>Đoạn kiểm thử hai phiếu bán trong test_sales.py</figcaption></figure>
                 <div class="project-links"><a class="project-link-btn" href="https://github.com/tqviett198/duriancare/blob/main/backend/sales/services.py#L25">Xem mã xử lý bán hàng</a> <a class="project-link-btn" href="https://github.com/tqviett198/duriancare/blob/main/backend/tests/test_sales.py#L835">Xem bài kiểm thử</a></div>
