@@ -249,8 +249,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const name = nameInput.value;
                 const message = messageInput.value;
                 
-                const subject = encodeURIComponent('Liên hệ công việc từ Portfolio - ' + name);
-                const body = encodeURIComponent(
+                const english = document.documentElement.lang === 'en';
+                const subject = encodeURIComponent((english ? 'Portfolio enquiry from ' : 'Liên hệ công việc từ Portfolio - ') + name);
+                const body = encodeURIComponent(english ? `Hi Việt,\n\n${message}\n\nBest regards,\n${name}` :
                     `Kính gửi bạn Trần Quốc Việt,\n\n` +
                     `Tôi tên là: ${name}\n\n` +
                     `Nội dung liên hệ:\n${message}\n\n` +
