@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================
     // 1. THEME TOGGLER (DARK / LIGHT MODE)
     // ==========================================
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    initializeStockDemo(document.getElementById('stock-demo'), document.documentElement.lang === 'en', reducedMotion);
     const themeToggleBtn = document.getElementById('theme-toggle');
     const themeIcon = themeToggleBtn.querySelector('i');
     
@@ -66,11 +68,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openMobileMenu() {
         mobileNav.classList.add('open');
+        mobileMenuBtn.setAttribute('aria-expanded', 'true');
         mobileMenuIcon.className = 'fa-solid fa-xmark';
     }
 
     function closeMobileMenu() {
         mobileNav.classList.remove('open');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
         mobileMenuIcon.className = 'fa-solid fa-bars';
     }
 
@@ -162,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         requestAnimationFrame(animateCursor);
     }
-    animateCursor();
+    if (!reducedMotion.matches && window.matchMedia('(pointer: fine)').matches) animateCursor();
     
     // Ẩn con trỏ tùy biến khi chuột di chuyển ra khỏi cửa sổ trình duyệt (iframe/webpage)
     document.addEventListener('mouseleave', () => {
@@ -195,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 6. 3D PARALLAX TILT FOR PROFILE CARD
     // ==========================================
     const profileCardWrapper = document.querySelector('.profile-card-wrapper');
-    if (profileCardWrapper) {
+    if (profileCardWrapper && !reducedMotion.matches) {
         const card = profileCardWrapper.querySelector('.profile-card');
         
         profileCardWrapper.addEventListener('mousemove', (e) => {
@@ -271,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 9. INTERACTIVE PARTICLES BACKGROUND
     // ==========================================
     const particlesCanvas = document.getElementById('particles-canvas');
-    if (particlesCanvas) {
+    if (particlesCanvas && !reducedMotion.matches) {
         const pCtx = particlesCanvas.getContext('2d');
         let particlesArray = [];
         const mouse = {
@@ -422,3 +426,48 @@ document.addEventListener('DOMContentLoaded', () => {
         animateParticles();
     }
 });
+
+function initializeStockDemo(root, english, reducedMotion) {
+    if (!root) return;
+    const copy = english ? {
+        title: 'Try two orders on one batch',
+        intro: 'Browser simulation. Each order requests the last 50 kg.',
+        run: 'Submit both orders', replay: 'Run again', inventory: 'Stock remaining',
+        source: 'View the row lock in Django',
+        steps: ['Order A locks the stock row. Order B waits.', 'A sells 50 kg and commits. The lock is released.', 'B acquires the lock, reads 0 kg and is rejected (insufficient_stock).']
+    } : {
+        title: 'Thử bán cùng một lô cho hai đơn',
+        intro: 'Mô phỏng trên trình duyệt. Mỗi đơn yêu cầu mua 50 kg cuối cùng.',
+        run: 'Gửi hai đơn, mỗi đơn 50 kg', replay: 'Chạy lại', inventory: 'Tồn kho',
+        source: 'Xem đoạn Django khóa dòng tồn kho',
+        steps: ['Đơn A khóa dòng tồn kho. Đơn B chờ.', 'A bán 50 kg và hoàn tất giao dịch. Khóa được giải phóng.', 'B lấy khóa, đọc tồn kho 0 kg và bị từ chối (insufficient_stock).']
+    };
+    const get = key => root.querySelector('[data-demo="' + key + '"]');
+    const button = get('run');
+    const list = get('steps');
+    const stock = kg => { get('inventory').textContent = copy.inventory + ' · ' + kg + ' kg'; };
+    for (const key of ['title', 'intro', 'source']) get(key).textContent = copy[key];
+    button.textContent = copy.run;
+    stock(50);
+    root.hidden = false;
+    button.addEventListener('click', () => {
+        if (button.disabled) return;
+        button.disabled = true;
+        list.replaceChildren();
+        stock(50);
+        function advance(index) {
+            const row = document.createElement('li');
+            row.textContent = copy.steps[index];
+            list.append(row);
+            if (index === 1) stock(0);
+            if (index + 1 < copy.steps.length) {
+                if (reducedMotion.matches) advance(index + 1);
+                else window.setTimeout(() => advance(index + 1), 1100);
+            } else {
+                button.textContent = copy.replay;
+                button.disabled = false;
+            }
+        }
+        advance(0);
+    });
+}
